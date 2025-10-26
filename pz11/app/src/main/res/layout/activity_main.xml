@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:layout_marginTop="30dp"
+    android:layout_marginLeft="7dp">
+
+    <TextView
+        android:id="@+id/textName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Название продукта"/>
+    <EditText
+        android:id="@+id/NameProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textName"
+        tools:ignore="SpeakableTextPresentCheck"/>
+    <TextView
+        android:id="@+id/textEdIsm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/NameProduct"
+        android:text="Единица измерения"/>
+    <EditText
+        android:id="@+id/NameEdIsm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textEdIsm"
+        tools:ignore="SpeakableTextPresentCheck"/>
+    <Button
+        android:id="@+id/addProduct"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Добавить"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/NameEdIsm"
+        android:onClick="addProduct"
+        tools:ignore="OnClick" />
+    <ListView
+        android:id="@+id/productList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addProduct" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

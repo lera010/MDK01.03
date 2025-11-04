@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".MainActivity">
+
+    <!-- Заголовок -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:gravity="center"
+        android:text="Музыкальный Плеер"
+        android:textColor="#2C3E50"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <!-- Источники воспроизведения -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Источники воспроизведения"
+        android:textColor="#34495E"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/btnStartHttp"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="#3498DB"
+                android:onClick="onClickStart"
+                android:text="@string/http"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btnStartStream"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="#3498DB"
+                android:onClick="onClickStart"
+                android:text="@string/stream"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/btnStartSD"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="#3498DB"
+                android:onClick="onClickStart"
+                android:text="@string/sd"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btnStartUri"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="#3498DB"
+                android:onClick="onClickStart"
+                android:text="@string/uri"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnStartRaw"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#3498DB"
+            android:onClick="onClickStart"
+            android:text="@string/raw"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <!-- Управление воспроизведением -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Управление воспроизведением"
+        android:textColor="#34495E"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btnPause"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="#E74C3C"
+                android:onClick="onClick"
+                android:text="@string/pause"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btnResume"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="#27AE60"
+                android:onClick="onClick"
+                android:text="@string/resume"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginBottom="12dp"
+            android:background="#95A5A6"
+            android:onClick="onClick"
+            android:text="@string/stop"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <CheckBox
+            android:id="@+id/chbLoop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#3498DB"
+            android:text="@string/loop"
+            android:textColor="#2C3E50"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!-- Дополнительные функции -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Дополнительные функции"
+        android:textColor="#34495E"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <Button
+            android:id="@+id/btnBackward"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:background="#F39C12"
+            android:onClick="onClick"
+            android:text="@string/backward"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnForward"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="#F39C12"
+            android:onClick="onClick"
+            android:text="@string/forward"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnInfo"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:background="#9B59B6"
+            android:onClick="onClick"
+            android:text="@string/info"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

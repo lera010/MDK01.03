@@ -12,6 +12,44 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:adjustViewBounds="true"
-        tools:ignore="MissingConstraints" />
-
+        tools:ignore="MissingConstraints"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"/>
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+    <ImageButton
+        android:src="@drawable/rotate"
+        android:onClick="Rotate_90"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center_vertical"/>
+    <ImageButton
+        android:src="@drawable/reflect"
+        android:onClick="Reflect"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center_vertical" />
+    <ImageButton
+        android:src="@drawable/black_white"
+        android:onClick="BlackAndWhite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center_vertical" />
+    <ImageButton
+        android:src="@drawable/reset_hard"
+        android:onClick="ResetImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="center_vertical" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

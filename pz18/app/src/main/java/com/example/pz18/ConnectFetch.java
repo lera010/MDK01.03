@@ -1,7 +1,9 @@
 package com.example.pz18;
 
 import android.content.Context;
+import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -12,6 +14,8 @@ import java.net.URL;
 public class ConnectFetch {
     private static final String OPEN_WEATHER_MAP_API =
             "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric";
+    private static final String OPEN_WEATHER_ICON =
+            "https://openweathermap.org/img/wn/%s@2x.png";
     public static JSONObject getJSON(Context context, String city){
         try {
             String urlString = String.format(OPEN_WEATHER_MAP_API,
@@ -39,5 +43,18 @@ public class ConnectFetch {
         }catch(Exception e){
             return null;
         }
+
+    }
+    public static String getIconUrl(JSONObject json)
+    {
+        try {
+            // первый элемент массива метеорологических данных.
+            JSONObject details = json.getJSONArray("weather").getJSONObject(0);
+            String icon = details.getString("icon");
+            return String.format(OPEN_WEATHER_ICON, icon);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

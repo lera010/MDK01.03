@@ -6,14 +6,19 @@ import static com.example.pz18.StaticWeatherAnalyze.getDetailsField;
 import static com.example.pz18.StaticWeatherAnalyze.getLastUpdateTime;
 import static com.example.pz18.StaticWeatherAnalyze.getTemperatureField;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -29,22 +34,42 @@ public class MainActivity extends AppCompatActivity {
 
     Handler handler;
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new ConnectFetch(this, "Orenburg", new
-                ConnectFetch.OnConnectionCompleteListener()
-                {@Override
-                public void onSuccess(JSONObject response)
-                {renderWeather(response);
-                }
-                    @Override
-                    public void onFail(String message) {
-                        Toast.makeText(MainActivity.this,
-                                message,
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
+        setInfo();
+    }
+    private void setInfo() {
+        new ConnectFetch(this, new CityPreference(this).getCity(), new ConnectFetch.OnConnectionCompleteListener() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                renderWeather(response);
+            }
+            @Override
+            public void onFail(String message) {
+                Toast.makeText(MainActivity.this,
+                        message,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    public void changeCity(String city){
+        new CityPreference(this).setCity(city);
+        setInfo();
+    }
+    private void showInputDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Измените город:");
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setPositiveButton("Сохранить", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                changeCity(input.getText().toString());
+            }
+        });
+        builder.show();
     }
     private void renderWeather(JSONObject json){
         try {
@@ -65,5 +90,9 @@ public class MainActivity extends AppCompatActivity {
         }catch(Exception e){
             Log.e("SimpleWeather", "One or more fields not found in the JSONdata");
         }
+    }
+
+    public void setCity(View view) {
+        showInputDialog();
     }
 }

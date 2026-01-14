@@ -7,9 +7,9 @@
         android:id="@+id/weather_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
     <TextView
         android:textColor="#ffffff"
         android:id="@+id/details_field"
@@ -18,5 +18,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/weather_icon"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+    <TextView
+        android:textColor="#ffffff"
+        android:id="@+id/city_field"
+        android:text="город"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/details_field"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
 </RelativeLayout>

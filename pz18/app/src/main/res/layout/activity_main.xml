@@ -19,6 +19,8 @@
     <TextView
         android:text="город"
         android:id="@+id/city_field"
+        android:onClick="setCity"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -24,33 +25,44 @@ import java.util.Arrays;
 public class AppWidget extends AppWidgetProvider {
     final String LOG_TAG = "myLogs";
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.d(LOG_TAG, "onUpdate called");
-
-        // Обновляем каждый виджет
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[]appWidgetIds) {
+    //<
+        SharedPreferences sp = context.getSharedPreferences( ConfigActivity.WIDGET_PREF, Context.MODE_PRIVATE);
+    // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context,sp, appWidgetManager, appWidgetId);
         }
+        Log.d(LOG_TAG, "onUpdate " + Arrays.toString(appWidgetIds));
     }
 
-    static void updateAppWidget(final Context context, AppWidgetManager
-            appWidgetManager, final int appWidgetId) {
+    static void updateAppWidget(final Context context, SharedPreferences sharedPreferences, AppWidgetManager appWidgetManager, final int appWidgetId) {
+        // Читаем параметры Preferences
+        String widgetCity = sharedPreferences.getString(ConfigActivity.WIDGET_CITY+appWidgetId, "Orenburg");
+        Log.d("AppWidget", "Updating widget " + appWidgetId + " for city: " + widgetCity);
+        if (widgetCity == null) {
+            return;
+        }
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.app_widget);
-        new ConnectFetch(context, "Orenburg", new ConnectFetch.OnConnectionCompleteListener()
-                {@Override
-                public void onSuccess(JSONObject response) {
-                    renderWeather(response,context,remoteViews,appWidgetId);
-                }
-                    @Override
-                    public void onFail(String message) {
-                    }
-                });
+        new ConnectFetch(context, widgetCity, new ConnectFetch.OnConnectionCompleteListener() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                renderWeather(response,context,remoteViews,appWidgetId);
+            }
+            @Override
+            public void onFail(String message) {
+            }
+        });
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
+// Удаляем Preferences
+        SharedPreferences.Editor editor = context.getSharedPreferences(ConfigActivity.WIDGET_PREF, Context.MODE_PRIVATE).edit();
+        for (int widgetID : appWidgetIds) {
+            editor.remove(ConfigActivity.WIDGET_CITY + widgetID);
+        }
         Log.d(LOG_TAG, "onDeleted " + Arrays.toString(appWidgetIds));
     }
     @Override
@@ -71,11 +83,14 @@ public class AppWidget extends AppWidgetProvider {
     public static void renderWeather(JSONObject json, Context context, RemoteViews remoteViews, int appWidgetId){
         try {
             AppWidgetTarget appWidgetTarget = new AppWidgetTarget(context, remoteViews, R.id.weather_icon, appWidgetId);
+            String city = StaticWeatherAnalyze.getCityField(json);
             Glide.with(context.getApplicationContext())
                     .load(getIconUrl(json))
                     .asBitmap()
                     .into(appWidgetTarget );
             remoteViews.setTextViewText(R.id.details_field, getTemperatureField(json));
+            remoteViews.setTextViewText(R.id.city_field, city);
+
             pushWidgetUpdate(context, remoteViews);
         }catch(Exception e){
             Log.e("SimpleWeather", "One or more fields not found in the JSON data");}

@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.pz18"
-        minSdk = 35
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
-    implementation("com.github.bumptech.glide:glide:4.11.0")
+    implementation("com.github.bumptech.glide:glide:3.8.0")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

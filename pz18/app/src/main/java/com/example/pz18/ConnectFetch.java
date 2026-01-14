@@ -1,7 +1,9 @@
 package com.example.pz18;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,36 @@ public class ConnectFetch {
             "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric";
     private static final String OPEN_WEATHER_ICON =
             "https://openweathermap.org/img/wn/%s@2x.png";
+    private OnConnectionCompleteListener listener;
+    Handler handler;
+    public ConnectFetch(Context context, String city, OnConnectionCompleteListener listener){
+        this.listener = listener;
+        handler = new Handler();
+        updateWeatherData(city,context);
+    }
+
+    private void updateWeatherData(final String city, final Context context) {
+        new Thread(){
+            public void run(){
+                final JSONObject json = ConnectFetch.getJSON(context, city);
+                if(json ==
+                        null){ handler.post(new
+                                                    Runnable(){
+                                                        public void run(){
+                                                            listener.onFail(city);
+                                                        }
+                                                    });
+                } else {
+                    handler.post(new Runnable(){
+                        public void run(){
+                            listener.onSuccess(json);
+                        }
+                    });
+                }
+            }
+        }.start();
+    }
+
     public static JSONObject getJSON(Context context, String city){
         try {
             String urlString = String.format(OPEN_WEATHER_MAP_API,
@@ -56,5 +88,10 @@ public class ConnectFetch {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public interface OnConnectionCompleteListener {
+        void onSuccess(JSONObject response);
+        void onFail(String message);
     }
 }

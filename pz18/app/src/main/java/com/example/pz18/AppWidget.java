@@ -1,10 +1,20 @@
 package com.example.pz18;
 
+import static com.example.pz18.ConnectFetch.getIconUrl;
+import static com.example.pz18.StaticWeatherAnalyze.getTemperatureField;
+
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.util.Log;
 import android.widget.RemoteViews;
+
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.AppWidgetTarget;
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -13,17 +23,29 @@ import java.util.Arrays;
  */
 public class AppWidget extends AppWidgetProvider {
     final String LOG_TAG = "myLogs";
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d(LOG_TAG, "onUpdate called");
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+        // Обновляем каждый виджет
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
+    }
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
-        //views.setTextViewText(R.id.appwidget_text, widgetText);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+    static void updateAppWidget(final Context context, AppWidgetManager
+            appWidgetManager, final int appWidgetId) {
+        final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.app_widget);
+        new ConnectFetch(context, "Orenburg", new ConnectFetch.OnConnectionCompleteListener()
+                {@Override
+                public void onSuccess(JSONObject response) {
+                    renderWeather(response,context,remoteViews,appWidgetId);
+                }
+                    @Override
+                    public void onFail(String message) {
+                    }
+                });
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
     @Override
@@ -40,5 +62,22 @@ public class AppWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
     // Enter relevant functionality for when the last widget is disabled
         Log.d(LOG_TAG, "onDisabled");
+    }
+    public static void pushWidgetUpdate(Context context, RemoteViews rv) {
+        ComponentName myWidget = new ComponentName(context, AppWidget.class);
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        manager.updateAppWidget(myWidget, rv);
+    }
+    public static void renderWeather(JSONObject json, Context context, RemoteViews remoteViews, int appWidgetId){
+        try {
+            AppWidgetTarget appWidgetTarget = new AppWidgetTarget(context, remoteViews, R.id.weather_icon, appWidgetId);
+            Glide.with(context.getApplicationContext())
+                    .load(getIconUrl(json))
+                    .asBitmap()
+                    .into(appWidgetTarget );
+            remoteViews.setTextViewText(R.id.details_field, getTemperatureField(json));
+            pushWidgetUpdate(context, remoteViews);
+        }catch(Exception e){
+            Log.e("SimpleWeather", "One or more fields not found in the JSON data");}
     }
 }

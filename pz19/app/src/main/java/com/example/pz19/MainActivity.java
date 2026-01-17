@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     LayoutInflater layoutInflater;
     List<User> users = new ArrayList<>();
     UserListAdapter userListAdapter;
+    FrameLayout UserPanel;
+    TextView NameTextView, StateTextView, AgeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,20 @@ public class MainActivity extends AppCompatActivity {
         layoutInflater = LayoutInflater.from(context);
         userListAdapter = new UserListAdapter();
         listView.setAdapter(userListAdapter);
+        UserPanel = findViewById(R.id.userPanel);
+        NameTextView = findViewById(R.id.NameTextView);
+        StateTextView = findViewById(R.id.StateTextView);
+        AgeTextView = findViewById(R.id.AgeTextView);
+    }
+
+    public void BackToList(View view) {
+        UserVisibility(false);
+    }
+
+    private void UserVisibility(boolean visible) {
+        if (visible)
+            UserPanel.setVisibility(View.VISIBLE);
+        else UserPanel.setVisibility(View.GONE);
     }
 
     private class UserListAdapter extends BaseAdapter {
@@ -78,7 +95,20 @@ public class MainActivity extends AppCompatActivity {
             nameView.setText(currentUser.getName());
             stateView.setText(currentUser.getState());
 
+            currentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InitPanel((User)getItem(position));
+                    UserVisibility(true);
+                }
+            });
             return currentView;
         }
+    }
+
+    private void InitPanel(User item) {
+        NameTextView.setText(item.getName());
+        StateTextView.setText(item.getState());
+        AgeTextView.setText(String.valueOf(item.getAge()));
     }
 }

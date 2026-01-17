@@ -21,4 +21,7 @@ public class User {
     public String getState() {
         return State;
     }
+    public int getAge() {
+        return Age;
+    }
 }

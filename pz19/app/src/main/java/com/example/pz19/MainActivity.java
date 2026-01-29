@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void AddUsersInList() {
-        users.add(new User("hhh", "hhh", 19));
-        users.add(new User(",lmjk", "nhbg", 19));
-        users.add(new User("gfcx", "jkh", 19));
-        users.add(new User("gf", "gdexsr", 19));
-        users.add(new User("gdxswe", "uih", 19));
+        users.add(new User("hhh", "hhh", 19, 1));
+        users.add(new User(",lmjk", "nhbg", 19,0));
+        users.add(new User("gfcx", "jkh", 19,2));
+        users.add(new User("gf", "gdexsr", 19,2));
+        users.add(new User("gdxswe", "uih", 19,1));
     }
 
     private void Init(){
@@ -94,7 +94,19 @@ public class MainActivity extends AppCompatActivity {
 
             nameView.setText(currentUser.getName());
             stateView.setText(currentUser.getState());
-
+            FrameLayout StateRound = currentView.findViewById(R.id.StateRound);
+            switch (currentUser.getStateSignal())
+            {
+                case 0:
+                    StateRound.setBackgroundResource(R.drawable.back_offline);
+                    break;
+                case 1:
+                    StateRound.setBackgroundResource(R.drawable.back_online);
+                    break;
+                case 2:
+                    StateRound.setBackgroundResource(R.drawable.back_departed);
+                    break;
+            }
             currentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -3,11 +3,13 @@ package com.example.pz19;
 public class User {
     private  String Name, State;
     private int Age;
+    private int StateSignal;
 
-    public User(String name, String state, int age) {
+    public User(String name, String state, int age, int stateSignal) {
         Name = name;
         State = state;
         Age = age;
+        StateSignal = stateSignal;
     }
 
     public String getName() {
@@ -18,10 +20,14 @@ public class User {
         Name = name;
     }
 
+    public void setStateSignal(int stateSignal) {
+        StateSignal = stateSignal;
+    }
     public String getState() {
         return State;
     }
     public int getAge() {
         return Age;
     }
+    public int getStateSignal() { return StateSignal;}
 }

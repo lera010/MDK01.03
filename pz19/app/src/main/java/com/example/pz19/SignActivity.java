@@ -3,9 +3,13 @@ package com.example.pz19;
 import static android.app.ProgressDialog.show;
 import static com.example.pz19.Transform.StringNoNull;
 import static com.example.pz19.Transform.Vibrate;
+import static com.example.pz19.UserStaticInfo.AGE;
+import static com.example.pz19.UserStaticInfo.NAME;
 import static com.example.pz19.UserStaticInfo.PASSWORD;
 import static com.example.pz19.UserStaticInfo.POSITION;
 import static com.example.pz19.UserStaticInfo.PROFILE_ID;
+import static com.example.pz19.UserStaticInfo.STATE;
+import static com.example.pz19.UserStaticInfo.USERS_PROFILE_INFO;
 import static com.example.pz19.UserStaticInfo.USERS_SIGN_IN_INFO;
 import static com.example.pz19.UserStaticInfo.profileId;
 
@@ -14,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 public class SignActivity extends AppCompatActivity {
 
     private EditText LoginTextView, PasswordTextView;
+    private EditText NewLoginTextView, NewPasswordTextView, NewAgeTextView, NewNameTextView, NewStateTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,28 @@ public class SignActivity extends AppCompatActivity {
     private void Init() {
         LoginTextView = findViewById(R.id.LoginTextView);
         PasswordTextView = findViewById(R.id.PasswordTextView);
+        NewLoginTextView = findViewById(R.id.NewLoginTextView);
+        NewPasswordTextView = findViewById(R.id.NewPasswordTextView);
+        NewAgeTextView = findViewById(R.id.NewAgeTextView);
+        NewNameTextView = findViewById(R.id.NewNameTextView);
+        NewStateTextView = findViewById(R.id.NewStateTextView);
+
+        TabHost tabHost = findViewById(R.id.tabHost);
+
+        tabHost.setup();
+
+        TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
+        tabSpec.setContent(R.id.tabSignIn);
+        tabSpec.setIndicator("Bxoд");
+
+        tabHost.addTab(tabSpec);
+
+        tabSpec = tabHost.newTabSpec("tag2");
+        tabSpec.setContent(R.id.tabSignUp);
+        tabSpec.setIndicator("Регистрация");
+
+        tabHost.addTab(tabSpec);
+        tabHost.setCurrentTab(0);
     }
 
     public void SignIn(View view) {
@@ -65,8 +93,7 @@ public class SignActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError error) {
                 }
             });
-        }
-        else {
+        } else {
             Vibrate(SignActivity.this);
 
             Toast.makeText(SignActivity.this,
@@ -81,7 +108,7 @@ public class SignActivity extends AppCompatActivity {
 
     private void goNext(String profileId) {
         UserStaticInfo.profileId = profileId;
-        Intent intent= new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
@@ -95,4 +122,51 @@ public class SignActivity extends AppCompatActivity {
         return PasswordTextView.getText().toString();
     }
 
+    public void SignUp(View view) {
+        if (StringNoNull(getNewLogin()) && StringNoNull(getNewPassword()) && StringNoNull(getNewName()) && StringNoNull(getNewState())){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            String id = database.getReference(USERS_PROFILE_INFO).push().getKey();
+            String login = getNewLogin();
+
+            database.getReference(USERS_SIGN_IN_INFO).child(login).child(PASSWORD).setValue(getNewPassword());
+            database.getReference(USERS_SIGN_IN_INFO).child(login).child(PROFILE_ID).setValue(id);
+
+            database.getReference(USERS_PROFILE_INFO).child(id).child(AGE).setValue(getNewAge());
+            database.getReference(USERS_PROFILE_INFO).child(id).child(NAME).setValue(getNewName());
+            database.getReference(USERS_PROFILE_INFO).child(id).child(STATE).setValue(getNewState());
+
+            goNext(id);
+        }
+        else{
+            Vibrate(SignActivity.this);
+
+            Toast.makeText(SignActivity.this,
+                    getResources().getText(R.string.NullParametersMessage),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getNewLogin() {
+        return NewLoginTextView.getText().toString();
+    }
+    private String getNewPassword() {
+        return NewPasswordTextView.getText().toString();
+    }
+    private int getNewAge(){
+        try {
+            return Transform.parseIntOrDefault(NewAgeTextView.getText().toString(),0);
+        }
+        catch(Exception NumberFormatException){
+            return 0;
+        }
+    }
+    private String getNewName(){
+        return NewNameTextView.getText().toString();
+    }
+    private String getNewState(){
+        return NewStateTextView.getText().toString();
+    }
 }
+
+

@@ -1,6 +1,10 @@
 package com.example.pz19;
 
+import static com.example.pz19.UserStaticInfo.POSITION;
+import static com.example.pz19.UserStaticInfo.users;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,25 +27,19 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     Context context;
     LayoutInflater layoutInflater;
-    List<User> users = new ArrayList<>();
-    UserListAdapter userListAdapter;
+    static UserListAdapter userListAdapter;
     FrameLayout UserPanel;
     TextView NameTextView, StateTextView, AgeTextView;
+    public static void UpdateList() {
+        userListAdapter.notifyDataSetChanged();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AddUsersInList();
+        new UserStaticInfo();
         Init();
-    }
-
-    private void AddUsersInList() {
-        users.add(new User("hhh", "hhh", 19, 1));
-        users.add(new User(",lmjk", "nhbg", 19,0));
-        users.add(new User("gfcx", "jkh", 19,2));
-        users.add(new User("gf", "gdexsr", 19,2));
-        users.add(new User("gdxswe", "uih", 19,1));
     }
 
     private void Init(){
@@ -64,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
         if (visible)
             UserPanel.setVisibility(View.VISIBLE);
         else UserPanel.setVisibility(View.GONE);
+    }
+    public void GoToUserProfile(int position){
+        Intent intent= new Intent(context, UserActivity.class);
+        intent.putExtra(POSITION, position);
+        startActivity(intent);
     }
 
     private class UserListAdapter extends BaseAdapter {
@@ -110,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
             currentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InitPanel((User)getItem(position));
-                    UserVisibility(true);
+                    //InitPanel((User)getItem(position));
+                    //UserVisibility(true);
+                    GoToUserProfile(position);
                 }
             });
             return currentView;
@@ -123,4 +127,5 @@ public class MainActivity extends AppCompatActivity {
         StateTextView.setText(item.getState());
         AgeTextView.setText(String.valueOf(item.getAge()));
     }
+
 }

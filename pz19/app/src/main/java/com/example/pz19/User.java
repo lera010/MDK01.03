@@ -26,6 +26,9 @@ public class User {
     public String getState() {
         return State;
     }
+    public void setState(String state) {
+        State = state;
+    }
     public int getAge() {
         return Age;
     }

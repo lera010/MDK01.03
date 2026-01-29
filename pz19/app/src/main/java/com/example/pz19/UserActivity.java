@@ -7,16 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class UserActivity extends AppCompatActivity {
 
     private User activeUser;
-    private EditText NameTextView, StateTextView;
+    private EditText NameTextView, StateTextView, AgeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +27,12 @@ public class UserActivity extends AppCompatActivity {
     private void Init(){
         NameTextView = findViewById(R.id.NameTextView);
         StateTextView = findViewById(R.id.StateTextView);
+        AgeTextView = findViewById(R.id.AgeTextView);
     }
     private void setUserInfo(){
         NameTextView.setText(activeUser.getName());
         StateTextView.setText(activeUser.getState());
+        AgeTextView.setText(String.valueOf(activeUser.getAge()));
     }
     public void Back(View view) {
         onBackPressed();
@@ -43,7 +41,14 @@ public class UserActivity extends AppCompatActivity {
     public void Save(View view) {
         activeUser.setName(NameTextView.getText().toString());
         activeUser.setState(StateTextView.getText().toString());
-        MainActivity.UpdateList();
+        String age = AgeTextView.getText().toString();
+        try{
+            activeUser.setAge(Integer.parseInt(age));
+        }
+        catch (Exception NumberFormatException){
+            activeUser.setAge(activeUser.getAge());
+        }
+        MainActivity.UpdateListAndUserPanel(activeUser);
         finish();
     }
 }

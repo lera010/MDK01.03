@@ -33,4 +33,6 @@ public class User {
         return Age;
     }
     public int getStateSignal() { return StateSignal;}
+
+    public void setAge(int age) {Age = age;}
 }

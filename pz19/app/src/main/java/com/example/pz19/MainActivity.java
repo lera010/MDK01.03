@@ -14,14 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
@@ -29,9 +22,13 @@ public class MainActivity extends AppCompatActivity {
     LayoutInflater layoutInflater;
     static UserListAdapter userListAdapter;
     FrameLayout UserPanel;
-    TextView NameTextView, StateTextView, AgeTextView;
-    public static void UpdateList() {
+    static TextView NameTextView;
+    static TextView StateTextView;
+    static TextView AgeTextView;
+    int positionActiveUser;
+    public static void UpdateListAndUserPanel(User user) {
         userListAdapter.notifyDataSetChanged();
+        InitPanel(user);
     }
 
     @Override
@@ -67,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(context, UserActivity.class);
         intent.putExtra(POSITION, position);
         startActivity(intent);
+    }
+
+    public void EditUser(View view) {
+        GoToUserProfile(positionActiveUser);
     }
 
     private class UserListAdapter extends BaseAdapter {
@@ -113,16 +114,17 @@ public class MainActivity extends AppCompatActivity {
             currentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //InitPanel((User)getItem(position));
-                    //UserVisibility(true);
-                    GoToUserProfile(position);
+                    positionActiveUser = position;
+                    InitPanel((User)getItem(position));
+                    UserVisibility(true);
+                    //GoToUserProfile(position);
                 }
             });
             return currentView;
         }
     }
 
-    private void InitPanel(User item) {
+    private static void InitPanel(User item) {
         NameTextView.setText(item.getName());
         StateTextView.setText(item.getState());
         AgeTextView.setText(String.valueOf(item.getAge()));
